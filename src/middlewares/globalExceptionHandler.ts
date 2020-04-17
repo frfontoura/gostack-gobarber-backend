@@ -4,10 +4,10 @@ import AppError from '../errors/AppError';
 
 export default function globalExceptionHandler(
   err: Error,
-  request: Request,
+  _request: Request,
   response: Response,
-  _: NextFunction,
-) {
+  _next: NextFunction,
+): Response<AppError> {
   if (err instanceof AppError) {
     return response.status(err.statusCode).json({
       status: 'error',
@@ -15,6 +15,7 @@ export default function globalExceptionHandler(
     });
   }
 
+  /* eslint-disable no-console */
   console.error(err);
 
   return response.status(500).json({

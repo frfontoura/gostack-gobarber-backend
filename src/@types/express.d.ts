@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/interface-name-prefix */
 declare namespace Express {
-  export interface IRequest {
+  export interface Request {
     user: {
       id: string;
     };

@@ -33,8 +33,8 @@ class User {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @Expose()
-  getAvatar_url(): string | null {
+  @Expose({ name: 'avatar_url' })
+  getAvatarUrl(): string | null {
     if (!this.avatar) {
       return null;
     }

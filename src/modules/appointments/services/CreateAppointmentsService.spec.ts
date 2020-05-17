@@ -1,19 +1,23 @@
 import AppError from '@shared/errors/AppError';
 import FakeNotificationsRepository from '@modules/notifications/repositories/fakes/FakeNotificationsRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRepository';
 import CreateAppointmentsService from './CreateAppointmentsService';
 
 let fakeAppointmentsRepository: FakeAppointmentsRepository;
 let fakeNotificationsRepository: FakeNotificationsRepository;
 let createAppointmentsService: CreateAppointmentsService;
+let fakeCacheProvider: FakeCacheProvider;
 
 describe('CreateAppointment', () => {
   beforeEach(() => {
     fakeAppointmentsRepository = new FakeAppointmentsRepository();
     fakeNotificationsRepository = new FakeNotificationsRepository();
+    fakeCacheProvider = new FakeCacheProvider();
     createAppointmentsService = new CreateAppointmentsService(
       fakeAppointmentsRepository,
       fakeNotificationsRepository,
+      fakeCacheProvider,
     );
   });
 
@@ -27,6 +31,8 @@ describe('CreateAppointment', () => {
       'create',
     );
 
+    const createCache = jest.spyOn(fakeCacheProvider, 'invalidate');
+
     const appointment = await createAppointmentsService.execute({
       date: new Date(2020, 4, 10, 13),
       provider_id: 'provider_id',
@@ -36,6 +42,7 @@ describe('CreateAppointment', () => {
     expect(appointment).toHaveProperty('id');
     expect(appointment.provider_id).toBe('provider_id');
     expect(createNotification).toBeCalled();
+    expect(createCache).toBeCalled();
   });
 
   it('should not be able to create two appointments on the same date', async () => {

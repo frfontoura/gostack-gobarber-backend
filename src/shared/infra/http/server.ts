@@ -11,12 +11,14 @@ import { errors as celebrateErrors } from 'celebrate';
 import uploadConfig from '@config/upload';
 import globalExceptionHandler from '@shared/infra/http/middlewares/globalExceptionHandler';
 import routes from './routes';
+import rateLimiter from './middlewares/rateLimiter';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use('/files', express.static(uploadConfig.uploadsFolder));
+app.use(rateLimiter);
 app.use(routes);
 app.use(celebrateErrors());
 app.use(globalExceptionHandler);

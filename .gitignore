@@ -2,8 +2,10 @@
 .vscode/
 build/
 temp/
-tmp/*
-!tmp/.gitkeep
+tmp/uploads/*.jpg
+
+# no-avatar img
+!tmp/uploads/no-avatar.png
 
 
 # Logs
